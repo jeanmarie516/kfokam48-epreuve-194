@@ -18,4 +18,16 @@ Une entrée par étape : ce que je viens de faire, ce qui m'a bloqué et combien
 
 **IA :** a généré le premier jet des services et des composants React ; vérifié par revue ligne à ligne des règles RGx contre le cahier des charges, exécution des 8 tests, et test manuel du flux (session → présence → dépôt → relecture → tableau) via les écrans.
 
+## Étape 4 — Livraison finale (v1.0)
+
+**Fait :** README d'installation (F1 : React justifié en une ligne), CHANGELOG cohérent avec les PR, docker compose (db + backend + frontend), tickets restants #2, #10, #14 fermés, backlog trié (0 issue Must ouverte). Test du démarrage comme le sujet l'exige : `docker compose up` vérifié sur cette machine (ports surchargés via .env local, valeurs par défaut standards pour le correcteur), puis test de fumée des 5 opérations imposées de bout en bout — toutes les réponses conformes au contrat, moyenne calculée par l'API visible dans le tableau.
+
+**Bloqué :** ~35 min — deux bugs révélés par le test du démarrage et jamais vus avant : (1) le test d'intégration s'appelait `*IT` et surefire ne l'exécutait pas, il ne tournait donc jamais — renommé en `*Test`, ce qui a révélé (2) une requête dérivée invalide (`etudiantId` au lieu de `depositaireId`) qui aurait fait planter le démarrage chez le correcteur. Le test de fumée complet passe après correction. Les ports 5432/8080 étant occupés par d'autres projets locaux, ils sont devenus paramétrables (K48_DB_PORT/K48_API_PORT/K48_FRONT_PORT).
+
+**IA :** a aidé à diagnostiquer la pile de logs Docker (requête dérivée Spring Data) et à structurer le CHANGELOG ; vérifié en relançant les 9 tests locaux puis le scénario complet curl sur la pile réelle, en comparant chaque réponse au contrat d'API.
+
+### Repriorisation écrite
+
+L'enveloppe de l'étape 3 n'étant pas encore remise à la livraison, la v1.0 est posée d'abord comme convenu avec le client de l'épreuve ; l'enveloppe (bug + changement de besoin) sera traitée dès réception avec la conduite du changement exigée : issue avant de coder, bug reproduit, migration versionnée, contrat mis à jour, correctif et évolution séparés, analyse mise à jour dans un commit qui le dit.
+
 **IA :** utilisée pour le formalisme Mermaid (syntaxe `stateDiagram-v2`, `erDiagram`) et pour relire la cohérence EF↔RG↔contrat. Vérifié en relisant chaque diagramme contre les codes HTTP du contrat d'API imposé (410/409/403/429, format d'erreur unique { code, message }), chaque colonne de D2 contre les futures migrations Flyway, et chaque règle RGx contre la question client d'origine.

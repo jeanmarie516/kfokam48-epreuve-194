@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface ExerciceRepository extends JpaRepository<Exercice, Long> {
 
-    boolean existsBySessionIdAndEtudiantId(Long sessionId, Long etudiantId);
+    /** Unicité (session, déposant) — le contrat impose 409 en cas de doublon. */
+    boolean existsBySessionIdAndDepositaireId(Long sessionId, Long depositaireId);
 
     List<Exercice> findBySessionId(Long sessionId);
 
-    List<Exercice> findByDepositaireId(Long etudiantId);
+    List<Exercice> findByDepositaireId(Long depositaireId);
 }

@@ -3,8 +3,12 @@ package com.kfokam48.presences.web;
 import com.kfokam48.presences.domain.Etudiant;
 import com.kfokam48.presences.domain.Promotion;
 import com.kfokam48.presences.domain.SessionCours;
+import com.kfokam48.presences.repository.ErreurSaisieCodeRepository;
 import com.kfokam48.presences.repository.EtudiantRepository;
+import com.kfokam48.presences.repository.ExerciceRepository;
+import com.kfokam48.presences.repository.PresenceRepository;
 import com.kfokam48.presences.repository.PromotionRepository;
+import com.kfokam48.presences.repository.RelectureRepository;
 import com.kfokam48.presences.repository.SessionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class PresencesApiIT {
+class PresencesApiTest {
 
     @LocalServerPort
     int port;
@@ -47,6 +51,14 @@ class PresencesApiIT {
     EtudiantRepository etudiants;
     @Autowired
     SessionRepository sessions;
+    @Autowired
+    PresenceRepository presences;
+    @Autowired
+    ExerciceRepository exercices;
+    @Autowired
+    RelectureRepository relectures;
+    @Autowired
+    ErreurSaisieCodeRepository erreursSaisie;
 
     /** Clock figé : permet de tester RG1 (expiration) sans attendre. */
     @MockBean
@@ -63,9 +75,14 @@ class PresencesApiIT {
         org.mockito.Mockito.when(clock.instant()).thenAnswer(inv -> maintenant);
         org.mockito.Mockito.when(clock.getZone()).thenReturn(ZoneOffset.UTC);
 
-        promotions.deleteAll();
+        // Purge dans l'ordre des clés étrangères (les données de démo existent au démarrage).
+        erreursSaisie.deleteAll();
+        relectures.deleteAll();
+        presences.deleteAll();
+        exercices.deleteAll();
         sessions.deleteAll();
         etudiants.deleteAll();
+        promotions.deleteAll();
 
         promo = promotions.save(new Promotion("K48-2026"));
         alice = etudiants.save(new Etudiant(promo, "Alice"));
