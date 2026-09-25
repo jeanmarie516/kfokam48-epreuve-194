@@ -2,7 +2,7 @@
 
 Application fullstack pour la direction de la formation KFOKAM48 : sessions de cours avec code de présence expirant, dépôt de liens d'exercices, relecture par les pairs tirée au sort parmi les présents, et tableau de suivi pour le formateur.
 
-**Frontend choisi : React (Vite)**, parce que son démarrage minimal me laisse plus de temps pour l'analyse et la discipline Git, qui portent 70 des 100 points.
+**Frontend choisi : Next.js**, parce qu'il garde la simplicité de React (composants, hooks) tout en apportant un routage intégré et un build de production vérifiable d'une seule commande (`next build`).
 
 ## Démarrage
 
@@ -55,7 +55,7 @@ docker compose up --build
 ```
 /api         contrat.yaml          — contrat d'API (5 opérations imposées + compléments)
 /backend     Spring Boot 3.3       — Java 17, Maven + mvnw, Flyway, PostgreSQL
-/frontend    React 18 + Vite       — 3 écrans (formateur, étudiant, relecteur)
+/frontend    Next.js 14 (React 18) — 3 écrans (formateur, étudiant, relecteur)
 /docs        CAHIER_DES_CHARGES.md — 10 sections, EF1–EF16, RG1–RG15
              JOURNAL.md            — une entrée par étape
              diagrammes/           — D1, D2, D3, D4 en Mermaid

@@ -1,6 +1,6 @@
 # Cahier des charges — K48 Présences & Relectures
 
-Auteur : 194 (jeanmarie516) · **Version 2** — mise à jour à la suite de l'**enveloppe de l'étape 3** (bug de concurrence corrigé par #24 ; changement de besoin : **deux relecteurs par exercice**, note retenue = moyenne, provisoire si une seule relecture rendue) · Frontend choisi : **React** (Vite), parce que son démarrage minimal me laisse plus de temps pour l'analyse et la discipline Git, qui portent 70 des 100 points.
+Auteur : 194 (jeanmarie516) · **Version 2.1** — v2 : mise à jour à la suite de l'**enveloppe de l'étape 3** (bug de concurrence corrigé par #24 ; changement de besoin : **deux relecteurs par exercice**, note retenue = moyenne, provisoire si une seule relecture rendue) · v2.1 : frontend migré de React (Vite) vers **Next.js** (issue #30) · Frontend choisi : **Next.js**, parce qu'il garde la simplicité de React tout en apportant un routage intégré et un build de production vérifiable d'une seule commande.
 
 ## 1. Contexte et objectif
 
@@ -132,7 +132,7 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 - **B4** Validation des entrées et gestion centralisée des erreurs (`@RestControllerAdvice`) ; aucune stack trace renvoyée.
 - **B5** Schéma versionné par Flyway, migrations commitées ; `ddl-auto=update` interdit hors tests.
 - **B6** Deux tests qui prouvent quelque chose : un test unitaire sur une règle métier réelle (RG5/RG9), un test d'intégration sur un endpoint — exécutables sur poste vierge.
-- **F1** React déclaré et justifié dans le README ; le build passe.
+- **F1** Next.js déclaré et justifié dans le README ; le build passe (`next build`).
 - **F2** Trois écrans : formateur (ouvrir une session, voir le tableau), étudiant (marquer sa présence, déposer son exercice), relecteur (faire une relecture).
 - **F3** Appels API dans une couche dédiée ; états de chargement et d'erreur gérés ; la moyenne affichée vient de l'API, jamais recalculée côté frontend.
 - Démarrage : `docker compose up` ou trois commandes maximum documentées ; données de démonstration au démarrage.
@@ -149,7 +149,7 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 | Contrat d'API complété | `api/contrat.yaml` |
 | Backlog en issues | Issues GitHub de ce dépôt (labels Must/Should/Could) |
 | Backend | `backend/` (Spring Boot, Maven, mvnw) |
-| Frontend | `frontend/` (React + Vite) |
+| Frontend | `frontend/` (Next.js 14, React 18) |
 | Journal de bord | `docs/JOURNAL.md` |
 | CHANGELOG et README d'installation | `CHANGELOG.md`, `README.md` |
 | Soumission | `SOUMISSION.md` (téléversé sur la plateforme) |

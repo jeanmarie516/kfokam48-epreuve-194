@@ -31,8 +31,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Frontend (Vite)
-frontend/vite.config.ts.timestamp-*
+# Frontend (Next.js)
+.next/
+out/
 
 # ===== Environnement / secrets =====
 .env
