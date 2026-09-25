@@ -62,7 +62,7 @@ public class ExerciceService {
         }
         Etudiant etudiant = etudiants.findById(etudiantId)
                 .orElseThrow(ApiException::etudiantInconnu);
-        if (exercices.existsBySessionIdAndEtudiantId(sessionId, etudiantId)) {
+        if (exercices.existsBySessionIdAndDepositaireId(sessionId, etudiantId)) {
             throw ApiException.exerciceDejaDepose(); // contrat : 409
         }
 

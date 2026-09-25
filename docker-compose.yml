@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: k48
+      POSTGRES_PASSWORD: k48
+      POSTGRES_DB: k48
+    ports:
+      - "${K48_DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U k48"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+
+  backend:
+    image: maven:3.9-eclipse-temurin-17
+    working_dir: /app
+    command: sh -c "mvn -q spring-boot:run"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/k48
+      DB_USER: k48
+      DB_PASSWORD: k48
+    ports:
+      - "${K48_API_PORT:-8080}:8080"
+    volumes:
+      - ./backend:/app
+      - m2-cache:/root/.m2
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: node:18-alpine
+    working_dir: /app
+    command: sh -c "npm install --no-audit --no-fund && npm run dev -- --host"
+    environment:
+      VITE_API_URL: http://localhost:${K48_API_PORT:-8080}
+    ports:
+      - "${K48_FRONT_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+volumes:
+  m2-cache:
