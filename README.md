@@ -16,6 +16,11 @@ docker compose up --build
 - API : http://localhost:8080
 - La base PostgreSQL est créée et les **données de démonstration** (promotion K48, 10 étudiants) sont chargées automatiquement au démarrage.
 
+> **Ports** : les valeurs ci-dessus (5173 / 8080) sont les ports par défaut. Si un port
+> est déjà occupé par une autre application, surchargez-le dans un fichier `.env`
+> (copiez `.env.example`) — par exemple `K48_FRONT_PORT=5174`, `K48_API_PORT=8081`. Sans
+> `.env`, ces valeurs par défaut s'appliquent automatiquement.
+
 ### Option 2 — Trois commandes manuelles
 
 Prérequis : Java 17+, Docker (pour la base), Node 18+.
