@@ -12,7 +12,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
-
 /**
  * B4 : gestion centralisée des erreurs. Toute erreur — sans exception —
  * sort au format imposé { "code": "...", "message": "..." }. Aucune stack trace.
@@ -50,11 +49,33 @@ public class GlobalExceptionHandler {
                 "Le paramètre " + e.getName() + " est invalide.");
     }
 
-    /** Filet de sécurité : une contrainte d'unicité peut être violée par deux requêtes concurrentes. */
+    /**
+     * Issue #24 : deux requêtes concurrentes peuvent passer toutes deux la vérification
+     * applicative « déjà présent ? » ; la contrainte d'unicité en base tranche alors la course.
+     * On traduit cette perte de course en réponse du contrat plutôt qu'en erreur générique :
+     * le client reçoit exactement le 409 attendu, au format { code, message }.
+     */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> integrite(DataIntegrityViolationException e) {
+        String cause = messageDeLaCause(e);
+        if (cause.contains("uq_presence")) {
+            return body(HttpStatus.CONFLICT, "DEJA_PRESENT",
+                    "Vous êtes déjà marqué présent pour cette session.");
+        }
+        if (cause.contains("uq_exercice")) {
+            return body(HttpStatus.CONFLICT, "EXERCICE_DEJA_DEPOSE",
+                    "Vous avez déjà déposé un exercice pour cette session.");
+        }
         return body(HttpStatus.CONFLICT, "CONFLIT",
                 "L'opération entre en conflit avec une donnée existante.");
+    }
+
+    private String messageDeLaCause(Throwable e) {
+        Throwable c = e;
+        while (c.getCause() != null && c.getCause() != c) {
+            c = c.getCause();
+        }
+        return c.getMessage() == null ? "" : c.getMessage().toLowerCase();
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
