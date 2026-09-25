@@ -13,18 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * RG7 : le relecteur est choisi par le système, au hasard, parmi les étudiants présents à la session.
+ * RG7 : les relecteurs sont choisis par le système, au hasard, parmi les étudiants présents à la session.
  * RG5 : jamais le déposant lui-même.
- * RG6 : un seul relecteur par exercice — une relecture est créée à l'assignation, non rendue.
- * D2/H2 : le tirage a lieu au dépôt ; si aucun autre étudiant n'est présent, il est retenté
+ * RG6 v2 (enveloppe étape 3) : exactement deux relecteurs distincts par exercice.
+ * D2/H2 : le tirage a lieu au dépôt ; s'il y a moins de deux candidats, il est complété
  * à chaque nouvelle présence de la session.
  */
 @Service
 public class TirageRelecteurService {
+
+    /** RG6 v2 : deux relecteurs par exercice. */
+    public static final int NB_RELECTEURS = 2;
 
     private final ExerciceRepository exercices;
     private final PresenceRepository presences;
@@ -41,36 +43,41 @@ public class TirageRelecteurService {
         this.etudiants = etudiants;
     }
 
-    /** Au dépôt d'un exercice : tente d'assigner un relecteur immédiatement. */
+    /** Au dépôt d'un exercice : tente d'assigner immédiatement jusqu'à deux relecteurs. */
     @Transactional
     public void tirerAuDepot(Exercice exercice) {
-        assignerSiNecessaire(exercice);
+        completerAssignation(exercice);
     }
 
-    /** À chaque nouvelle présence : retente le tirage pour les exercices de la session sans relecteur. */
+    /** À chaque nouvelle présence : complète le tirage des exercices qui n'ont pas encore deux relecteurs. */
     @Transactional
     public void tirerPour(SessionCours session) {
-        List<Exercice> sansRelecture = exercices.findBySessionId(session.getId()).stream()
-                .filter(e -> e.getStatut().equals(Exercice.EN_ATTENTE))
-                .filter(e -> !relectures.existsByExerciceId(e.getId()))
+        List<Exercice> incomplets = exercices.findBySessionId(session.getId()).stream()
+                .filter(e -> relectures.findByExerciceId(e.getId()).size() < NB_RELECTEURS)
                 .toList();
-        for (Exercice e : sansRelecture) {
-            assignerSiNecessaire(e);
+        for (Exercice e : incomplets) {
+            completerAssignation(e);
         }
     }
 
-    private void assignerSiNecessaire(Exercice exercice) {
-        if (relectures.existsByExerciceId(exercice.getId())) {
-            return; // RG6 : un seul relecteur, déjà assigné
-        }
+    private void completerAssignation(Exercice exercice) {
         List<Etudiant> presents = presences.findBySessionId(exercice.getSession().getId()).stream()
                 .map(Presence::getEtudiant)
                 .filter(e -> !e.getId().equals(exercice.getDepositaire().getId())) // RG5
                 .toList();
-        if (presents.isEmpty()) {
-            return; // H2 : pas de candidat, on retentera à la prochaine présence
+        while (relectures.findByExerciceId(exercice.getId()).size() < NB_RELECTEURS
+                && !presents.isEmpty()) {
+            List<Long> dejaAssignes = relectures.findByExerciceId(exercice.getId()).stream()
+                    .map(r -> r.getRelecteur().getId())
+                    .toList();
+            List<Etudiant> candidats = presents.stream()
+                    .filter(e -> !dejaAssignes.contains(e.getId())) // distincts, RG6 v2
+                    .toList();
+            if (candidats.isEmpty()) {
+                return; // H2 : tous les présents sont déjà assignés, on complètera à la prochaine présence
+            }
+            Etudiant elu = candidats.get(ThreadLocalRandom.current().nextInt(candidats.size())); // RG7
+            relectures.save(new Relecture(exercice, elu));
         }
-        Etudiant elu = presents.get(ThreadLocalRandom.current().nextInt(presents.size())); // RG7
-        relectures.save(new Relecture(exercice, elu));
     }
 }

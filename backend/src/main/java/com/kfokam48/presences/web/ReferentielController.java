@@ -1,6 +1,5 @@
 package com.kfokam48.presences.web;
 
-import com.kfokam48.presences.domain.Relecture;
 import com.kfokam48.presences.dto.ReferentielDtos;
 import com.kfokam48.presences.exception.ApiException;
 import com.kfokam48.presences.repository.EtudiantRepository;
@@ -8,6 +7,7 @@ import com.kfokam48.presences.repository.ExerciceRepository;
 import com.kfokam48.presences.repository.PromotionRepository;
 import com.kfokam48.presences.repository.RelectureRepository;
 import com.kfokam48.presences.repository.SessionRepository;
+import com.kfokam48.presences.service.NoteRetenueService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,17 +25,20 @@ public class ReferentielController {
     private final SessionRepository sessions;
     private final ExerciceRepository exercices;
     private final RelectureRepository relectures;
+    private final NoteRetenueService noteRetenue;
 
     public ReferentielController(PromotionRepository promotions,
                                  EtudiantRepository etudiants,
                                  SessionRepository sessions,
                                  ExerciceRepository exercices,
-                                 RelectureRepository relectures) {
+                                 RelectureRepository relectures,
+                                 NoteRetenueService noteRetenue) {
         this.promotions = promotions;
         this.etudiants = etudiants;
         this.sessions = sessions;
         this.exercices = exercices;
         this.relectures = relectures;
+        this.noteRetenue = noteRetenue;
     }
 
     @GetMapping("/promotions")
@@ -64,7 +67,11 @@ public class ReferentielController {
         var etudiant = etudiants.findById(etudiantId).orElseThrow(ApiException::etudiantInconnu);
         return exercices.findByDepositaireId(etudiant.getId()).stream()
                 .map(e -> ReferentielDtos.ExerciceEtudiantDto.de(
-                        e, relectures.findByExerciceId(e.getId()).orElse(null)))
+                        e,
+                        noteRetenue.de(e)
+                                .map(n -> new ReferentielDtos.ExerciceEtudiantDto.NoteRetenueDto(
+                                        n.valeur(), n.provisoire(), n.commentaires()))
+                                .orElse(null)))
                 .toList();
     }
 }

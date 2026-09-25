@@ -10,7 +10,8 @@ public interface RelectureRepository extends JpaRepository<Relecture, Long> {
 
     boolean existsByExerciceId(Long exerciceId);
 
-    Optional<Relecture> findByExerciceId(Long exerciceId);
+    /** RG6 v2 : deux relectures par exercice → liste. */
+    List<Relecture> findByExerciceId(Long exerciceId);
 
     List<Relecture> findByRelecteurId(Long relecteurId);
 
