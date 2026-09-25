@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { api } from './api/client.js'
-import EcranFormateur from './pages/EcranFormateur.jsx'
-import EcranEtudiant from './pages/EcranEtudiant.jsx'
-import EcranRelecteur from './pages/EcranRelecteur.jsx'
+import EcranFormateur from '../src/components/EcranFormateur.jsx'
+import EcranEtudiant from '../src/components/EcranEtudiant.jsx'
+import EcranRelecteur from '../src/components/EcranRelecteur.jsx'
 
 const ONGLETS = [
   { id: 'formateur', label: 'Formateur' },
@@ -10,7 +9,7 @@ const ONGLETS = [
   { id: 'relecteur', label: 'Relecteur' },
 ]
 
-export default function App() {
+export default function Accueil() {
   const [onglet, setOnglet] = useState('formateur')
 
   return (

@@ -38,4 +38,12 @@ L'enveloppe de l'étape 3 n'étant pas encore remise à la livraison, la v1.0 es
 
 **IA :** a proposé le diagnostic de concurrence et la structure du correctif ; vérifié en écrivant moi-même le test qui reproduit le symptôme exact du client (il devait échouer pour la bonne raison : CONFLIT ≠ DEJA_PRESENT), en relisant la V3 contre la règle « données existantes préservées », et en rejouant les 13 tests. Le sacrifice S1 et les décisions D3/D4 sont les miens, écrits dans le cahier des charges.
 
+## Ajustement — migration Next.js (issue #30)
+
+**Fait :** frontend migré de React (Vite) vers Next.js 14 (pages router) sur demande : pages/index.jsx héberge les trois écrans inchangés (F2), couche API dédiée intacte (F3), NEXT_PUBLIC_API_URL remplace VITE_API_URL, port 5173 conservé (CORS intact), .next/ gitignoré, docker compose adapté, next build vérifié (F1). Analyse (v2.1), README, CHANGELOG (1.1.1) mis à jour.
+
+**Bloqué :** ~10 min — rien de notable, la structure composants/hooks de React se transpose telle quelle.
+
+**IA :** a généré la structure pages/ et les configs ; vérifié par next build, la relecture des trois écrans (aucune règle métier déplacée côté client), et la cohérence README/cahier des charges/CHANGELOG.
+
 **IA :** utilisée pour le formalisme Mermaid (syntaxe `stateDiagram-v2`, `erDiagram`) et pour relire la cohérence EF↔RG↔contrat. Vérifié en relisant chaque diagramme contre les codes HTTP du contrat d'API imposé (410/409/403/429, format d'erreur unique { code, message }), chaque colonne de D2 contre les futures migrations Flyway, et chaque règle RGx contre la question client d'origine.

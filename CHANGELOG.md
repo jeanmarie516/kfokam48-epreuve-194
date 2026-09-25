@@ -86,3 +86,12 @@ Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) 
 - **EF10/RG8 (remplacement du lien)** sort du périmètre maintenu : avec deux relecteurs,
   remplacer un lien après le premier rendu crée une incohérence entre relectures.
   L'endpoint reste conforme au contrat ; le formulaire disparaît de l'écran étudiant.
+
+## [1.1.1] — Migration Next.js
+
+### Modifié
+
+- **Frontend migré de React (Vite) vers Next.js 14** (issue #30) — le sujet autorise
+  les deux. `pages router` : pages/index.jsx héberge les trois écrans (F2), couche API
+  dédiée inchangée (F3), `NEXT_PUBLIC_API_URL` remplace `VITE_API_URL`, port 5173
+  conservé (CORS intact), `next build` vérifié (F1).
