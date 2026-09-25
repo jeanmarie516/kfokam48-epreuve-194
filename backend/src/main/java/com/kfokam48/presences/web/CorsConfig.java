@@ -5,7 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/** Le frontend (Next.js en dev) tourne sur 5173 ; l'API reste accessible sans restriction en local. */
+/** Le frontend Next.js (dev) est servi sur un port pouvant être surchargé via .env
+ *  (K48_FRONT_PORT). On accepte toute origine pour /api/** en local : l'application
+ *  n'utilise aucune authentification (Q1) ni cookie, l'ouverture large du CORS ne
+ *  présente pas de risque et rend l'app utilisable sur n'importe quel port local. */
 @Configuration
 public class CorsConfig {
 
@@ -15,7 +18,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5173", "http://127.0.0.1:5173")
+                        .allowedOrigins("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };
