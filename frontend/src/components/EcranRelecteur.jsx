@@ -96,14 +96,14 @@ export default function EcranRelecteur() {
           <div className="carte__tete">
             <h2 className="carte__titre">Mes relectures</h2>
             <button className="bouton bouton--secondaire" onClick={rafraichir} disabled={chargement}>
-              ⟳ Rafraîchir
+              <span className="icone icone--petit" aria-hidden>refresh</span> Rafraîchir
             </button>
           </div>
-          {chargement && <div className="notice notice--info">Chargement…</div>}
+          {chargement && <div className="notice notice--info"><span className="icone icone--petit" aria-hidden>hourglass_top</span> Chargement…</div>}
           {erreur && (
-            <div className="notice notice--erreur">⚠ <code>{erreur.code}</code> — {erreur.message}</div>
+            <div className="notice notice--erreur"><span className="icone icone--petit" aria-hidden>error</span> <code>{erreur.code}</code> — {erreur.message}</div>
           )}
-          {message && <div className="notice notice--succes">✓ {message}</div>}
+          {message && <div className="notice notice--succes"><span className="icone icone--petit" aria-hidden>check_circle</span> {message}</div>}
           {relectures.length === 0 && !chargement && (
             <p className="vide">
               Aucune relecture assignée. Un tirage au sort vous désignera parmi les présents (RG7).
@@ -159,7 +159,9 @@ function FormulaireRelecture({ relecture, onSoumettre, chargement }) {
           <input value={commentaire} onChange={(e) => setCommentaire(e.target.value)} placeholder="Avis sur l'exercice…" required />
         </div>
         <button type="submit" className="bouton bouton--principal" disabled={chargement}>
-          {relecture.rendue ? 'Corriger ma relecture' : 'Rendre ma relecture'}
+          {relecture.rendue
+            ? <><span className="icone icone--petit" aria-hidden>edit</span> Corriger ma relecture</>
+            : <><span className="icone icone--petit" aria-hidden>rate_review</span> Rendre ma relecture</>}
         </button>
       </form>
     </div>

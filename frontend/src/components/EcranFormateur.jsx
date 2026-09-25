@@ -115,7 +115,7 @@ export default function EcranFormateur() {
             />
           </div>
           <button type="submit" className="bouton bouton--principal" disabled={chargement || !promotionId}>
-            Ouvrir la session
+            <span className="icone icone--petit" aria-hidden>add_circle</span> Ouvrir la session
           </button>
         </form>
 
@@ -150,29 +150,29 @@ export default function EcranFormateur() {
                       ))}
                     </select>
                   </div>
-                  <button type="submit" className="bouton bouton--secondaire">Ajouter</button>
+                  <button type="submit" className="bouton bouton--secondaire"><span className="icone icone--petit" aria-hidden>person_add</span> Ajouter</button>
                   <button type="button" className="bouton bouton--danger" onClick={cloturer}>
-                    Clôturer la session
+                    <span className="icone icone--petit" aria-hidden>lock</span> Clôturer la session
                   </button>
                 </form>
               </>
             )}
           </div>
         )}
-        {message && <div className="notice notice--succes">✓ {message}</div>}
+        {message && <div className="notice notice--succes"><span className="icone icone--petit" aria-hidden>check_circle</span> {message}</div>}
       </section>
 
       <section className="carte">
         <div className="carte__tete">
           <h2 className="carte__titre">Tableau de suivi</h2>
           <button className="bouton bouton--secondaire" onClick={() => rafraichirTableau()} disabled={chargement}>
-            ⟳ Rafraîchir
+            <span className="icone icone--petit" aria-hidden>refresh</span> Rafraîchir
           </button>
         </div>
-        {chargement && <div className="notice notice--info">Chargement…</div>}
+        {chargement && <div className="notice notice--info"><span className="icone icone--petit" aria-hidden>hourglass_top</span> Chargement…</div>}
         {erreur && (
           <div className="notice notice--erreur">
-            ⚠ <code>{erreur.code}</code> — {erreur.message}
+            <span className="icone icone--petit" aria-hidden>error</span><code>{erreur.code}</code> — {erreur.message}
           </div>
         )}
         {tableau.length > 0 && (

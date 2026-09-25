@@ -296,6 +296,12 @@ table.tableau { width: 100%; border-collapse: collapse; font-size: 14px; min-wid
 .item__titre { font-weight: 700; font-size: 14.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .item a { color: var(--primary); text-decoration: none; font-weight: 500; }
 .item a:hover { text-decoration: underline; }
+.item a,
+.notice code,
+.item__tete a {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
 .item__note { margin-top: 8px; font-size: 14px; color: #334155; }
 .item__commentaire {
   margin: 6px 0 0;
@@ -309,9 +315,93 @@ table.tableau { width: 100%; border-collapse: collapse; font-size: 14px; min-wid
 /* ---------- Pied de page ---------- */
 .pied { text-align: center; color: var(--muted); font-size: 12.5px; padding: 24px 0 12px; }
 
+/* ---------- Icônes Material (Google Fonts) ---------- */
+.icone {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: -4px;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'liga';
+}
+.icone--petit { font-size: 16px; vertical-align: -3px; }
+.icone--grand { font-size: 26px; }
+
+/* ===================== Responsive ===================== */
+
+@media (max-width: 920px) {
+  .conteneur { padding: 20px 16px 50px; }
+  .carte { padding: 18px 18px; }
+  .topbar__meta { display: none; }
+  .tableau { min-width: 620px; }
+}
+
 @media (max-width: 640px) {
-  .topbar__meta { text-align: left; }
-  .nav-tabs { width: 100%; }
-  .nav-tabs button { flex: 1; padding: 9px 6px; }
-  .code-box__valeur { font-size: 26px; letter-spacing: 6px; }
+  .topbar { padding: 14px 0; }
+  .topbar__inner { padding: 0 14px; }
+  .brand__sub { font-size: 11.5px; }
+
+  .nav-tabs { width: 100%; padding: 5px; }
+  .nav-tabs button { flex: 1; padding: 10px 4px; font-size: 13.5px; }
+
+  .carte { padding: 16px 14px; margin-bottom: 16px; }
+  .carte__tete { align-items: flex-start; gap: 8px; }
+  .carte__titre { font-size: 16px; }
+  .carte__tete .bouton { width: auto; margin-left: 0; }
+
+  /* Formulaires : chaque champ passe en pleine largeur, boutons aussi */
+  .formulaire { display: block; }
+  .formulaire > * { width: 100% !important; margin: 0 0 12px; }
+  .champ, .champ--row .champ { min-width: 0; }
+  .champ--row { flex-direction: column; align-items: stretch; }
+  .champ input,
+  .champ select,
+  .champ textarea { max-width: 100%; }
+  .bouton { width: 100%; }
+
+  .item { padding: 12px 14px; }
+  .item__tete { align-items: flex-start; }
+  .item__tete a,
+  .item a { font-size: 13px; }
+
+  .code-box { flex-direction: column; align-items: flex-start; text-align: left; }
+  .code-box__valeur { font-size: 28px; letter-spacing: 8px; }
+  .code-box__expire { text-align: left; }
+
+  .tableau-enveloppe { box-shadow: none; }
+  table.tableau { min-width: 540px; }
+}
+
+/* Très petits écrans (< 380px) : onglets défilables, tailles réduites */
+@media (max-width: 380px) {
+  .brand__title { font-size: 15px; }
+  .brand__mark { width: 36px; height: 36px; font-size: 15px; }
+
+  .nav-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    border-radius: 14px;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tabs button {
+    flex: none;
+    padding: 9px 14px;
+    white-space: nowrap;
+  }
+
+  .code-box__valeur { font-size: 23px; letter-spacing: 5px; }
+  .conteneur { padding: 16px 12px 44px; }
+
+  .notice { font-size: 13px; padding: 10px 12px; }
+  .bouton { font-size: 13.5px; padding: 10px 14px; white-space: normal; }
 }

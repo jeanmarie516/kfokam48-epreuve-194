@@ -139,7 +139,7 @@ export default function EcranEtudiant() {
                 />
               </div>
               <button type="submit" className="bouton bouton--principal" disabled={chargement}>
-                Je suis présent
+                <span className="icone icone--petit" aria-hidden>how_to_reg</span> Je suis présent
               </button>
             </form>
           </section>
@@ -169,7 +169,7 @@ export default function EcranEtudiant() {
                 />
               </div>
               <button type="submit" className="bouton bouton--principal" disabled={chargement || !sessionId}>
-                Déposer
+                <span className="icone icone--petit" aria-hidden>publish</span> Déposer
               </button>
             </form>
           </section>
@@ -179,11 +179,11 @@ export default function EcranEtudiant() {
               <h2 className="carte__titre">Mes exercices et notes reçues</h2>
               <span className="badge badge--gris">{mesExercices.length} exercice{mesExercices.length > 1 ? 's' : ''}</span>
             </div>
-            {chargement && <div className="notice notice--info">Chargement…</div>}
+            {chargement && <div className="notice notice--info"><span className="icone icone--petit" aria-hidden>hourglass_top</span> Chargement…</div>}
             {erreur && (
-              <div className="notice notice--erreur">⚠ <code>{erreur.code}</code> — {erreur.message}</div>
+              <div className="notice notice--erreur"><span className="icone icone--petit" aria-hidden>error</span> <code>{erreur.code}</code> — {erreur.message}</div>
             )}
-            {message && <div className="notice notice--succes">✓ {message}</div>}
+            {message && <div className="notice notice--succes"><span className="icone icone--petit" aria-hidden>check_circle</span> {message}</div>}
 
             {mesExercices.length === 0 && !chargement && <p className="vide">Aucun exercice déposé.</p>}
 

@@ -4,9 +4,9 @@ import EcranEtudiant from '../src/components/EcranEtudiant.jsx'
 import EcranRelecteur from '../src/components/EcranRelecteur.jsx'
 
 const ONGLETS = [
-  { id: 'formateur', label: 'Formateur', icon: '🎓' },
-  { id: 'etudiant', label: 'Étudiant', icon: '🎒' },
-  { id: 'relecteur', label: 'Relecteur', icon: '✍️' },
+  { id: 'formateur', label: 'Formateur', icone: 'school' },
+  { id: 'etudiant', label: 'Étudiant', icone: 'menu_book' },
+  { id: 'relecteur', label: 'Relecteur', icone: 'rate_review' },
 ]
 
 export default function Accueil() {
@@ -37,7 +37,7 @@ export default function Accueil() {
             onClick={() => setOnglet(o.id)}
             aria-pressed={onglet === o.id}
           >
-            <span aria-hidden>{o.icon}</span> {o.label}
+            <span className="icone icone--petit" aria-hidden>{o.icone}</span> {o.label}
           </button>
         ))}
       </nav>
