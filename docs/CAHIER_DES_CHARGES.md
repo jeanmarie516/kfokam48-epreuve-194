@@ -156,13 +156,14 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 
 ## 10. Démarche prévue
 
-Les six étapes du sujet, menées dans cet ordre, avec un jalon Git poussé aux étapes 1, 2 et 4 :
+Les cinq étapes du sujet corrigé (les 4 corrections communiquées après le lancement sont intégrées : terme unique « issue », commit de vérification sans préfixe `[JALON]`, **suppression de l'ancienne épreuve Git sur bundle**, enveloppe remise par le surveillant), menées dans cet ordre, avec un jalon Git poussé aux étapes 1, 2 et 4 :
 
-1. **Analyse et conception** — ce cahier des charges, les diagrammes D1–D4, le contrat d'API complété, le backlog en issues. Jalon `[JALON] analyse` avant tout commit de code.
+1. **Analyse et conception** — ce cahier des charges, les diagrammes D1–D4, le contrat d'API complété, le backlog en issues sur ce dépôt unique. Jalon `[JALON] analyse` avant tout commit de code.
 2. **V0.1** — les stories Must uniquement : une branche par issue, une PR par branche, issues fermées par les commits. Migrations Flyway dès la première issue backend (le schéma est versionné avant l'étape 3, c'est une leçon du sujet). Jalon `[JALON] v0.1`.
-3. **Enveloppe** — issue ouverte avant de coder, bug reproduit, migration versionnée, contrat mis à jour, correctif et évolution séparés, cahier des charges et diagrammes mis à jour dans un commit qui le dit.
+3. **Enveloppe** (document remis par le surveillant après le jalon v0.1) — issue ouverte avant de coder, bug reproduit, migration versionnée, contrat mis à jour, correctif et évolution séparés (deux branches, deux PR), cahier des charges et diagrammes mis à jour dans un commit qui le dit.
 4. **V1.0** — jalon `[JALON] v1.0`, `CHANGELOG.md` cohérent avec l'historique, README testé depuis un clone vierge, backlog restant trié.
-5. **Épreuve Git** — dans le dépôt séparé `kfokam48-gitlab-194`, jamais mélangé à celui-ci.
-6. **Soumission** — `SOUMISSION.md` téléversé avec les hash des deux dépôts.
+5. **Soumission** — `SOUMISSION.md` rempli (adresse de **ce seul dépôt** et hash complet sur 40 caractères) puis téléversé sur la plateforme.
+
+**Definition of Done : une issue est terminée quand** — le code est poussé sur sa branche, la PR lie l'issue (issue fermée par le commit), les règles RGx concernées sont appliquées côté serveur, le build backend et frontend passe, et `main` reste fonctionnel après fusion.
 
 **Definition of Done : une issue est terminée quand** — le code est poussé sur sa branche, la PR lie l'issue (issue fermée par le commit), les règles RGx concernées sont appliquées côté serveur, le build backend et frontend passe, et `main` reste fonctionnel après fusion.

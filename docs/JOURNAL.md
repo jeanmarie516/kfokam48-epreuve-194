@@ -47,3 +47,11 @@ L'enveloppe de l'étape 3 n'étant pas encore remise à la livraison, la v1.0 es
 **IA :** a généré la structure pages/ et les configs ; vérifié par next build, la relecture des trois écrans (aucune règle métier déplacée côté client), et la cohérence README/cahier des charges/CHANGELOG.
 
 **IA :** utilisée pour le formalisme Mermaid (syntaxe `stateDiagram-v2`, `erDiagram`) et pour relire la cohérence EF↔RG↔contrat. Vérifié en relisant chaque diagramme contre les codes HTTP du contrat d'API imposé (410/409/403/429, format d'erreur unique { code, message }), chaque colonne de D2 contre les futures migrations Flyway, et chaque règle RGx contre la question client d'origine.
+
+## Ajustement — alignement final sur le sujet corrigé (4 corrections) + soumission
+
+**Fait :** remise à jour de l'analyse et des livrables pour coller au sujet corrigé — §10 du cahier des charges réécrit sur **cinq étapes** (suppression de la mention « six étapes », « épreuve Git » sur bundle et « deux dépôts » : il n'y a qu'un seul dépôt, `kfokam48-epreuve-194`), enveloppe décrite comme **remise par le surveillant**, et ajout du livrable `modeles/SOUMISSION.md` (étape 5, téléversé sur la plateforme) avec l'adresse du dépôt unique et le champ du hash final. CHANGELOG (1.1.2) et README cohérents.
+
+**Bloqué :** décision assumée de **ne pas réécrire l'historique Git** : le tout premier commit de vérification de connexion s'appelle encore `[JALON] depart` (ancienne consigne) au lieu de `chore: verification du depot`. Le renommer forcerait un `push --force destructeur sur main` (malus −5) sur TOUTE l'historique, pour un gain incertain : les trois vrais jalons (`[JALON] analyse` avant le premier code, `[JALON] v0.1`, `[JALON] v1.0`) sont présents, poussés et dans le bon ordre. Le coût de la réécriture dépasse largement le bénéfice ; on conserve l'historique authentique. Idem pour le `Revert "[JALON] v1.0"` (numéro 4ff81e8) : il est déjà dans le dépôt poussé, le jalon final reste en place et ordonné.
+
+**IA :** utilisée pour relire l'alignement du §10 et du modèle de soumission contre le sujet corrigé ; vérifié en relisant le cahier des charges (§10), le CHANGELOG et le README, et en confirmant que `git status` et le bon ordre des jalons sur `main` correspondent à ce qui est déclaré.

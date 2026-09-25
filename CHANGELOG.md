@@ -95,3 +95,13 @@ Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) 
   les deux. `pages router` : pages/index.jsx héberge les trois écrans (F2), couche API
   dédiée inchangée (F3), `NEXT_PUBLIC_API_URL` remplace `VITE_API_URL`, port 5173
   conservé (CORS intact), `next build` vérifié (F1).
+
+## [1.1.2] — Alignement sur le sujet corrigé (4 corrections) + soumission
+
+### Modifié
+
+- **Analyse (§10 « Démarche prévue »)** remise à jour pour refléter le sujet corrigé :
+  cinq étapes (plus d'épreuve Git sur bundle), enveloppe remise par le surveillant,
+  soumission avec un seul dépôt et un seul hash.
+- **Livrable de soumission** : ajout de `modeles/SOUMISSION.md` (étape 5), à téléverser
+  sur la plateforme avant 18h00.
