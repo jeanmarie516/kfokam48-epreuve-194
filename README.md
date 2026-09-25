@@ -67,10 +67,10 @@ docker compose up --build
 cd backend && ./mvnw test
 ```
 
-8 tests sur H2 en mémoire (aucune base locale requise) :
+13 tests sur H2 en mémoire (aucune base locale requise) :
 
-- **Unitaires** : RG5 (jamais son propre exercice → 403), RG9 (note entière 0–20 → 400 sinon), D1 (soumission unique → 409), RG10 (correction avant clôture).
-- **Intégration** : `POST /api/presences` (201 nominal, 409 `DEJA_PRESENT`, 410 `CODE_EXPIRE` avec le message exact du contrat, 400 `CODE_INCONNU`), `GET /api/tableau` (404 promotion inconnue). Vérifie aussi le format d'erreur `{ code, message }` sans stack trace.
+- **Unitaires** : RG5 (jamais son propre exercice → 403), RG9 (note entière 0–20 → 400 sinon), D1 (soumission unique → 409), RG10 (correction avant clôture), RG16 (moyenne des deux relectures au dixième — enveloppe), RG17 (note provisoire), RG18 (aucune relecture rendue).
+- **Intégration** : `POST /api/presences` (201 nominal, 409 `DEJA_PRESENT`, 410 `CODE_EXPIRE` avec le message exact du contrat, 400 `CODE_INCONNU`), `GET /api/tableau` (404 promotion inconnue), course concurrente sur les présences (bug #24 : la perdante reçoit `DEJA_PRESENT`). Vérifie aussi le format d'erreur `{ code, message }` sans stack trace.
 
 ## Documentation
 
