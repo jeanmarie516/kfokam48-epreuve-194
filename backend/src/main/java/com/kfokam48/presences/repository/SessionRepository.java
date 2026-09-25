@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SessionRepository extends JpaRepository<SessionCours, Long> {
 
     boolean existsByCode(String code);
+
+    java.util.Optional<SessionCours> findByCodeIgnoreCase(String code);
 }
