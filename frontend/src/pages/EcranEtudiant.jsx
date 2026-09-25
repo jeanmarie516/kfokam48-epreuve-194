@@ -80,20 +80,6 @@ export default function EcranEtudiant() {
     }
   }
 
-  async function remplacerLien(exerciceId, nouveauLien) {
-    setErreur(null)
-    setMessage(null)
-    setChargement(true)
-    try {
-      await api.remplacerLien(exerciceId, nouveauLien)
-      setMessage('Lien remplacé.')
-      await rafraichirMesExercices()
-    } catch (err) {
-      setErreur(err)
-    } finally {
-      setChargement(false)
-    }
-  }
 
   return (
     <div>
@@ -180,21 +166,22 @@ export default function EcranEtudiant() {
                   Session {ex.sessionId} — <strong>{ex.statut}</strong>{' '}
                   <a href={ex.lien} target="_blank" rel="noreferrer">{ex.lien}</a>
                 </div>
-                {ex.statut === 'EN_ATTENTE' && (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault()
-                      remplacerLien(ex.id, new FormData(e.currentTarget).get('nouveauLien'))
-                    }}
-                  >
-                    <input name="nouveauLien" placeholder="Nouveau lien (RG8)" size={40} required />
-                    <button type="submit">Remplacer le lien</button>
-                  </form>
-                )}
-                {ex.relectureRecue && (
+                {/* S1 (enveloppe) : le remplacement du lien est sorti du périmètre maintenu —
+                    avec deux relecteurs, remplacer un lien après le premier rendu crée une incohérence. */}
+                {ex.noteRetenue ? (
                   <div style={{ marginTop: 4 }}>
-                    Note reçue : <strong>{ex.relectureRecue.note}/20</strong> — « {ex.relectureRecue.commentaire} »
-                    {/* RG14 : le nom du relecteur n'est jamais affiché, l'API ne le renvoie pas */}
+                    Note reçue : <strong>{ex.noteRetenue.valeur}/20</strong>
+                    {ex.noteRetenue.provisoire && (
+                      <em> (provisoire — une seule des deux relectures rendues)</em>
+                    )}
+                    {ex.noteRetenue.commentaires.map((c, i) => (
+                      <div key={i}>« {c} »</div>
+                    ))}
+                    {/* RG14 : les noms des relecteurs ne sont jamais affichés, l'API ne les renvoie pas */}
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 4, color: '#666' }}>
+                    En attente de relecture (deux relecteurs tirés au sort parmi les présents).
                   </div>
                 )}
               </div>

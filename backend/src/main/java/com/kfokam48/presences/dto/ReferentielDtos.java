@@ -35,17 +35,14 @@ public final class ReferentielDtos {
         }
     }
 
-    /** Vue « étudiant relu » : note et commentaire oui, nom du relecteur jamais (RG14, Q8). */
-    public record ExerciceEtudiantDto(Long id, Long sessionId, String lien, String statut, RelectureRecueDto relectureRecue) {
+    /** Vue « étudiant relu » : note retenue et commentaires oui, nom des relecteurs jamais (RG14, Q8). v2 : RG16/RG17. */
+    public record ExerciceEtudiantDto(Long id, Long sessionId, String lien, String statut, NoteRetenueDto noteRetenue) {
 
-        public record RelectureRecueDto(Integer note, String commentaire) {
+        public record NoteRetenueDto(Double valeur, boolean provisoire, java.util.List<String> commentaires) {
         }
 
-        public static ExerciceEtudiantDto de(Exercice e, Relecture r) {
-            RelectureRecueDto recue = (r != null && r.estRendue())
-                    ? new RelectureRecueDto(r.getNote(), r.getCommentaire())
-                    : null;
-            return new ExerciceEtudiantDto(e.getId(), e.getSession().getId(), e.getLien(), e.getStatut(), recue);
+        public static ExerciceEtudiantDto de(Exercice e, NoteRetenueDto noteRetenue) {
+            return new ExerciceEtudiantDto(e.getId(), e.getSession().getId(), e.getLien(), e.getStatut(), noteRetenue);
         }
     }
 }

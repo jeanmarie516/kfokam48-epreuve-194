@@ -1,6 +1,6 @@
 # D4 — États-transitions du cycle de vie d'un exercice (bonus)
 
-> Un exercice naît au dépôt et meurt relu — ou reste en attente si le relecteur ne rend jamais (Q11). Les transitions sont déclenchées par les règles RG6, RG8, RG11 et la décision D2.
+> **Version 2 — enveloppe étape 3 :** deux relecteurs par exercice (RG6 v2). L'exercice passe à `RELU` dès la **première** relecture rendue (sa note s'affiche alors **provisoire**, RG17) ; la note devient définitive (moyenne des deux, RG16) quand les **deux** sont rendues. Si aucune n'est rendue, l'exercice reste en attente (RG18).
 
 ```mermaid
 stateDiagram-v2
@@ -9,20 +9,22 @@ stateDiagram-v2
     EN_ATTENTE --> EN_ATTENTE : PUT /api/exercices/{id}/lien<br/>(remplacement du lien, RG8 — personne n'a commencé à relire)
     EN_ATTENTE --> EN_ATTENTE : tirage du relecteur (au dépôt ou à chaque nouvelle présence, D2/H2 — RG7)
 
-    EN_ATTENTE --> RELU : POST ou PUT /api/relectures/{id}<br/>(note entière 0–20 validée, RG9)
+    EN_ATTENTE --> RELU : première relecture rendue<br/>(note affichée PROVISOIRE — RG17)
+    RELU --> RELU : deuxième relecture rendue<br/>(note définitive = moyenne des deux — RG16, D3)
 
-    EN_ATTENTE --> [*] : session clôturée sans relecture (RG11 : reste compté dans relecturesEnAttente)
+    EN_ATTENTE --> [*] : session clôturée sans relecture rendue (RG18 : reste compté dans relecturesEnAttente des 2 relecteurs)
     RELU --> [*] : session clôturée (note figée définitivement — RG10/D1)
 
     note right of EN_ATTENTE
-        Visible "en attente" dans le tableau (Q11)
-        Remplacement du lien refusé (409 LIEN_VERROUILLE)
-        dès que la relecture est rendue
+        Visible "en attente" dans le tableau (Q11/RG18)
+        Sortie du périmètre maintenu : remplacement du lien (S1)
     end note
 
     note right of RELU
-        L'étudiant relu voit note + commentaire,
-        jamais le nom du relecteur (RG14)
+        L'étudiant relu voit note + commentaire(s),
+        jamais le nom des relecteurs (RG14)
+        provisoire=true tant que la 2e relecture
+        n'est pas rendue (RG17)
     end note
 ```
 

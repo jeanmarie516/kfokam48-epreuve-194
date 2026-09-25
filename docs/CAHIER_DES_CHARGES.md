@@ -1,6 +1,6 @@
 # Cahier des charges — K48 Présences & Relectures
 
-Auteur : 194 (jeanmarie516) · Version 1 · Frontend choisi : **React** (Vite), parce que son démarrage minimal me laisse plus de temps pour l'analyse et la discipline Git, qui portent 70 des 100 points.
+Auteur : 194 (jeanmarie516) · **Version 2** — mise à jour à la suite de l'**enveloppe de l'étape 3** (bug de concurrence corrigé par #24 ; changement de besoin : **deux relecteurs par exercice**, note retenue = moyenne, provisoire si une seule relecture rendue) · Frontend choisi : **React** (Vite), parce que son démarrage minimal me laisse plus de temps pour l'analyse et la discipline Git, qui portent 70 des 100 points.
 
 ## 1. Contexte et objectif
 
@@ -67,7 +67,7 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 | EF7 | Le système assigne un relecteur au hasard parmi les présents | Après dépôt, l'exercice a exactement un relecteur (Q6), étudiant présent à la session (Q7), différent du déposant (RG5). S'il n'y a aucun autre présent au moment du dépôt, l'exercice reste sans relecteur et un relecteur est tiré à la prochaine présence (hypothèse H2) | Must |
 | EF8 | Le relecteur rend une note entière sur 20 et un commentaire | Une note non entière ou hors 0–20 renvoie `NOTE_INVALIDE` (HTTP 400) ; une relecture déjà rendue renvoie `RELECTURE_DEJA_RENDUE` (HTTP 409) ; relire son propre exercice renvoie `AUTO_RELECTURE_INTERDITE` (HTTP 403, RG5) | Must |
 | EF9 | Le relecteur peut corriger sa note avant la clôture | Tant que la session n'est pas clôturée, une correction modifie note et commentaire ; après clôture, toute tentative renvoie `SESSION_CLOTUREE` (HTTP 409) — décision D1 (tranchage Q10/Q15) | Must |
-| EF10 | L'étudiant peut remplacer son lien avant première relecture | Le remplacement réussit tant que `statut=EN_ATTENTE` sans relecture commencée ; sinon `LIEN_VERROUILLE` (HTTP 409, RG8) | Should |
+| ~~EF10~~ | **(v2) Sorti du périmètre maintenu — voir S1 en section 7** : le remplacement du lien n'est plus garanti testé ni maintenu (l'endpoint reste conforme au contrat complémentaire) | — | Won't (assumé) |
 | EF11 | Le formateur peut clôturer la session | Après clôture, plus aucun dépôt d'exercice ni correction de relecture n'est accepté (RG6) | Must |
 | EF12 | Le formateur peut ajouter une présence à la main | La présence créée porte `source=FORMATEUR`, visible dans le tableau (RG4, Q14) | Must |
 | EF13 | Le formateur voit le tableau par étudiant | Pour une promotion : par étudiant, sa présence à chaque session, son nombre d'exercices déposés, la moyenne des notes reçues (entière sur 20, arrondie au point, aucun recalcul côté frontend — F3), et les relectures qu'il doit encore faire (Q16). Une promotion inconnue renvoie 404 | Must |
@@ -95,7 +95,7 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 | RG3 | La présence par code n'est possible que tant que la session n'est pas clôturée | Q3 |
 | RG4 | Une présence ajoutée manuellement par le formateur est marquée `source=FORMATEUR` ; celle saisie par l'étudiant vaut `source=ETUDIANT` | Q14 |
 | RG5 | Un étudiant ne peut jamais être relecteur de son propre exercice | Q5 |
-| RG6 | Un exercice n'a qu'un seul relecteur | Q6 |
+| RG6 | **(v2 — enveloppe)** Un exercice est relu par **deux relecteurs distincts** (anciennement : un seul, issue de Q6 que ce changement remplace) — tirés au sort parmi les présents, jamais le déposant ; unicité (exercice, relecteur) maintenue | Q6 remplacée par l'enveloppe étape 3 |
 | RG7 | Le relecteur est choisi par le système, au hasard, parmi les étudiants présents à la session | Q7 |
 | RG8 | Le lien d'un exercice peut être remplacé tant que personne n'a commencé à le relire | Q13 |
 | RG9 | La note est un entier entre 0 et 20 inclus | Q9 |
@@ -105,6 +105,9 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 | RG13 | Après 5 codes erronés consécutifs, l'étudiant est bloqué 2 minutes | Q4 |
 | RG14 | L'étudiant relu voit la note et le commentaire, mais jamais le nom du relecteur | Q8 |
 | RG15 | Une session clôturée n'accepte plus ni dépôt d'exercice ni correction de relecture | Q3 + Q10 (implicitement) |
+| RG16 | **(v2 — enveloppe)** La note retenue d'un exercice est la **moyenne des deux relectures rendues**, au dixième près, sans arrondi (D3) | Enveloppe étape 3 |
+| RG17 | **(v2 — enveloppe)** Si une seule des deux relectures est rendue, sa note est affichée **marquée provisoire** (`provisoire=true`) | Enveloppe étape 3 |
+| RG18 | **(v2 — enveloppe)** Si aucune des deux relectures n'est rendue, l'exercice reste « en attente » et apparaît dans le tableau (extension de RG11 au cas deux relecteurs) | Enveloppe étape 3 + RG11 (Q11) |
 
 ## 7. Zones d'ombre, hypothèses et contradictions
 
@@ -117,6 +120,9 @@ Le formateur n'est pas dans la liste des étudiants : son accès au tableau se f
 | H3 — Formats du code et du lien | Aucune question | Code = 6 caractères alphanumériques uniques par session ; lien = URL http(s) valide. | Choix d'implémentation minimal, suffisant pour Q2/Q13. |
 | H4 — Promotion de référence | Aucune question | Une promotion = liste fixe d'étudiants chargée en données de démo ; le tableau est interrogé par `promotionId`. | Le besoin (Q16) ne demande aucune gestion de promotions au-delà de la consultation. |
 | H5 — Moyenne sans note | Hypothèse | Un étudiant sans note reçue a une moyenne `null` (affichée « — »), pas 0. | 0 serait une information fausse (il n'a pas été noté). |
+| **D3 — Arrondi de la moyenne de deux notes (v2, enveloppe)** | Non demandé au client : la moyenne de deux entiers peut donner un demi-point (14 et 15 → 14,5). | La moyenne est calculée **au dixième près, sans arrondi** (`14,5` s'affiche tel quel). | Q9 impose l'entier **par relecture**, pas pour la moyenne retenue ; arrondir déformerait le jugement de deux pairs. C'est le calcul de l'API (F3), le frontend ne recalcule rien. |
+| **D4 — Exercice sans aucune relecture rendue (v2, enveloppe)** | Non dit explicitement par le client pour le cas deux relecteurs. | L'exercice reste `EN_ATTENTE`, compté dans les relectures en attente des deux relecteurs assignés (RG18). | Cohérent avec Q11 qui décrit ce cas pour un relecteur ; étendu naturellement à deux. |
+| **S1 — Sacrifice de périmètre (v2, enveloppe)** | Le changement « deux relecteurs » est un Must qui arrive tard : quelque chose doit sortir du périmètre. | **EF10/RG8 (remplacement du lien, Q13) sort du périmètre maintenu** : l'endpoint reste conforme au contrat mais le formulaire disparaît de l'écran étudiant et la règle n'est plus garantie testée. Avec deux relecteurs, remplacer un lien après le premier rendu crée une incohérence entre relectures. | « Un périmètre réduit et assumé vaut mieux qu'un périmètre annoncé et non tenu » (enveloppe). Écrit aussi dans le journal. |
 
 ## 8. Contraintes techniques
 

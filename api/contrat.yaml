@@ -11,7 +11,15 @@ info:
     relecture par les pairs tirée au sort parmi les présents, tableau formateur.
 
     Références : exigences EF1–EF16 et règles RG1–RG15 du cahier des charges.
-  version: 1.0.0
+  version: 1.1.0
+  description: |
+    Sessions de cours avec code de présence expirant, dépôt de liens d'exercices,
+    relecture par les pairs tirée au sort parmi les présents, tableau formateur.
+
+    **v1.1.0 — enveloppe étape 3 :** chaque exercice est relu par **deux relecteurs
+    distincts** ; la note retenue est la moyenne des deux ; si une seule relecture est
+    rendue, sa note s'affiche marquée `provisoire: true`. Références : EF1–EF16
+    (EF10 sortie du périmètre maintenu) et RG1–RG18 du cahier des charges v2.
 
 servers:
   - url: http://localhost:8080
@@ -670,7 +678,7 @@ components:
 
     ExerciceDeEtudiant:
       type: object
-      description: Vue étudiant relu — n'expose jamais le nom du relecteur (RG14).
+      description: Vue étudiant relu — n'expose jamais le nom des relecteurs (RG14). v2 : note retenue avec statut provisoire.
       required: [id, sessionId, lien, statut]
       properties:
         id:
@@ -684,14 +692,8 @@ components:
         statut:
           type: string
           enum: [EN_ATTENTE, RELU]
-        relectureRecue:
-          type: object
-          nullable: true
-          properties:
-            note:
-              type: integer
-            commentaire:
-              type: string
+        noteRetenue:
+          $ref: "#/components/schemas/NoteRetenue"
 
     RelecturePayload:
       type: object
@@ -742,6 +744,7 @@ components:
         rendue:
           type: boolean
 
+
     TableauLigne:
       type: object
       required: [etudiantId, nom, presences, exercicesDeposes, moyenne, relecturesEnAttente]
@@ -768,7 +771,29 @@ components:
         moyenne:
           type: number
           nullable: true
-          description: Moyenne des notes reçues, calculée par l'API (F3). Null si aucune note (H5).
+          description: |
+            Moyenne des notes **retenues** (moyenne des deux relectures rendues par exercice,
+            au dixième près — RG16 v2), calculée par l'API (F3). Null si aucune note.
         relecturesEnAttente:
           type: integer
-          description: Relectures assignées non encore rendues (Q11).
+          description: Relectures assignées non encore rendues (Q11, RG18 v2).
+
+    NoteRetenue:
+      type: object
+      description: Note retenue d'un exercice (RG16/RG17 v2 — enveloppe étape 3).
+      required: [valeur, provisoire]
+      properties:
+        valeur:
+          type: number
+          nullable: true
+          description: |
+            Moyenne des deux relectures rendues (au dixième), ou note de l'unique
+            relecture rendue, ou null si aucune.
+        provisoire:
+          type: boolean
+          description: Vrai si une seule des deux relectures est rendue (RG17).
+        commentaires:
+          type: array
+          description: Commentaires des relectures rendues (jamais le nom des relecteurs, RG14).
+          items:
+            type: string
