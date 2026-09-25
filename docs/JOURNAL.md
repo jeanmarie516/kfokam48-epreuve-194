@@ -12,7 +12,7 @@ Une entrée par étape : ce que je viens de faire, ce qui m'a bloqué et combien
 
 ## Étape 2 — Première version (v0.1)
 
-**Fait :** 7 branches/PR fusionnées (#15 à #22), une par ticket, issues fermées par les commits. Backend : squelette Flyway + erreurs { code, message }, sessions, présences (RG1/RG2/RG3/RG13), exercices, relectures (D1 : POST + PUT jusqu'à clôture), tableau Q16, référentiels, CORS, données de démo. Frontend React : 3 écrans (F2), couche API dédiée (F3), build vérifié (F1). 8 tests verts (B6) : 4 unitaires sur RG5/RG9/D1/RG10, 4 d'intégration sur POST /api/presences et GET /api/tableau sur H2.
+**Fait :** 7 branches/PR fusionnées (#15 à #22), une par issue, issues fermées par les commits. Backend : squelette Flyway + erreurs { code, message }, sessions, présences (RG1/RG2/RG3/RG13), exercices, relectures (D1 : POST + PUT jusqu'à clôture), tableau Q16, référentiels, CORS, données de démo. Frontend React : 3 écrans (F2), couche API dédiée (F3), build vérifié (F1). 8 tests verts (B6) : 4 unitaires sur RG5/RG9/D1/RG10, 4 d'intégration sur POST /api/presences et GET /api/tableau sur H2.
 
 **Bloqué :** ~15 min — @MockitoBean n'existe pas en Spring Boot 3.3, remplacé par @MockBean ; et le test a révélé un vrai bug d'ordre : un déposant tentant de relire son propre exercice recevait 404 au lieu du 403 attendu par le contrat — RG5 est maintenant vérifié en premier.
 
@@ -20,7 +20,7 @@ Une entrée par étape : ce que je viens de faire, ce qui m'a bloqué et combien
 
 ## Étape 4 — Livraison finale (v1.0)
 
-**Fait :** README d'installation (F1 : React justifié en une ligne), CHANGELOG cohérent avec les PR, docker compose (db + backend + frontend), tickets restants #2, #10, #14 fermés, backlog trié (0 issue Must ouverte). Test du démarrage comme le sujet l'exige : `docker compose up` vérifié sur cette machine (ports surchargés via .env local, valeurs par défaut standards pour le correcteur), puis test de fumée des 5 opérations imposées de bout en bout — toutes les réponses conformes au contrat, moyenne calculée par l'API visible dans le tableau.
+**Fait :** README d'installation (F1 : framework justifié en une ligne), CHANGELOG cohérent avec les PR, docker compose (db + backend + frontend), issues restantes #2, #10, #14 fermées, backlog trié (0 issue Must ouverte). Test du démarrage comme le sujet l'exige : `docker compose up` vérifié sur cette machine (ports surchargés via .env local, valeurs par défaut standards pour le correcteur), puis test de fumée des 5 opérations imposées de bout en bout — toutes les réponses conformes au contrat, moyenne calculée par l'API visible dans le tableau.
 
 **Bloqué :** ~35 min — deux bugs révélés par le test du démarrage et jamais vus avant : (1) le test d'intégration s'appelait `*IT` et surefire ne l'exécutait pas, il ne tournait donc jamais — renommé en `*Test`, ce qui a révélé (2) une requête dérivée invalide (`etudiantId` au lieu de `depositaireId`) qui aurait fait planter le démarrage chez le correcteur. Le test de fumée complet passe après correction. Les ports 5432/8080 étant occupés par d'autres projets locaux, ils sont devenus paramétrables (K48_DB_PORT/K48_API_PORT/K48_FRONT_PORT).
 

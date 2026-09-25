@@ -43,14 +43,14 @@ Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) 
 
 ### Non livré (repriorisé)
 
-- **Ticket #14 (Could)** — Docker Compose : reporté, l'option « 3 commandes » du
+- **Issue #14 (Could)** — Docker Compose : reporté, l'option « 3 commandes » du
   sujet est honorée. [voir ci-dessous si livré en v1.0]
 
 ## [1.0.0] — Version finale
 
 ### Ajouté
 
-- **Docker Compose** (ticket #14) — `docker compose up` démarre PostgreSQL, le backend
+- **Docker Compose** (issue #14) — `docker compose up` démarre PostgreSQL, le backend
   et le frontend ; données de démonstration incluses.
 - **README d'installation** testé depuis un clone vierge.
 
