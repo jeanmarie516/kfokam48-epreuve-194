@@ -4,35 +4,53 @@ import EcranEtudiant from '../src/components/EcranEtudiant.jsx'
 import EcranRelecteur from '../src/components/EcranRelecteur.jsx'
 
 const ONGLETS = [
-  { id: 'formateur', label: 'Formateur' },
-  { id: 'etudiant', label: 'Étudiant' },
-  { id: 'relecteur', label: 'Relecteur' },
+  { id: 'formateur', label: 'Formateur', icon: '🎓' },
+  { id: 'etudiant', label: 'Étudiant', icon: '🎒' },
+  { id: 'relecteur', label: 'Relecteur', icon: '✍️' },
 ]
 
 export default function Accueil() {
   const [onglet, setOnglet] = useState('formateur')
 
   return (
-    <div style={{ fontFamily: 'sans-serif', margin: '0 auto', maxWidth: 960, padding: 16 }}>
-      <h1>K48 — Présences &amp; Relectures</h1>
-      <nav style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+    <>
+      <header className="topbar">
+        <div className="topbar__inner">
+          <div className="brand">
+            <div className="brand__mark">K48</div>
+            <div>
+              <div className="brand__title">Présences &amp; Relectures</div>
+              <div className="brand__sub">Direction de la formation · KFOKAM48</div>
+            </div>
+          </div>
+          <div className="topbar__meta">
+            Suivi des sessions, dépôts et relectures par les pairs
+          </div>
+        </div>
+      </header>
+
+      <nav className="nav-tabs" aria-label="Espaces">
         {ONGLETS.map((o) => (
           <button
             key={o.id}
+            className={onglet === o.id ? 'active' : ''}
             onClick={() => setOnglet(o.id)}
-            style={{
-              padding: '8px 16px',
-              fontWeight: onglet === o.id ? 'bold' : 'normal',
-              cursor: 'pointer',
-            }}
+            aria-pressed={onglet === o.id}
           >
-            {o.label}
+            <span aria-hidden>{o.icon}</span> {o.label}
           </button>
         ))}
       </nav>
-      {onglet === 'formateur' && <EcranFormateur />}
-      {onglet === 'etudiant' && <EcranEtudiant />}
-      {onglet === 'relecteur' && <EcranRelecteur />}
-    </div>
+
+      <main className="conteneur">
+        {onglet === 'formateur' && <EcranFormateur />}
+        {onglet === 'etudiant' && <EcranEtudiant />}
+        {onglet === 'relecteur' && <EcranRelecteur />}
+      </main>
+
+      <footer className="pied">
+        K48 — Présences &amp; Relectures · Épreuve finale fullstack KFOKAM48
+      </footer>
+    </>
   )
 }

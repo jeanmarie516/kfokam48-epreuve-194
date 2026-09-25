@@ -64,36 +64,50 @@ export default function EcranRelecteur() {
 
   return (
     <div>
-      <label>
-        Promotion:{' '}
-        <select value={promotionId} onChange={(e) => { setPromotionId(e.target.value); setEtudiantId('') }}>
-          <option value="">— choisir —</option>
-          {promotions.map((p) => (
-            <option key={p.id} value={p.id}>{p.nom}</option>
-          ))}
-        </select>
-      </label>{' '}
-      <label>
-        Je suis le relecteur :{' '}
-        <select value={etudiantId} onChange={(e) => setEtudiantId(e.target.value)} disabled={!promotionId}>
-          <option value="">— choisir mon nom —</option>
-          {etudiants.map((et) => (
-            <option key={et.id} value={et.id}>{et.nom}</option>
-          ))}
-        </select>
-      </label>
+      <div className="carte">
+        <div className="carte__tete">
+          <h2 className="carte__titre">Qui êtes-vous ?</h2>
+          <span className="badge badge--indigo">Q1 · identité déclarée</span>
+        </div>
+        <div className="champ--row">
+          <div className="champ">
+            <label>Promotion</label>
+            <select value={promotionId} onChange={(e) => { setPromotionId(e.target.value); setEtudiantId('') }}>
+              <option value="">— choisir —</option>
+              {promotions.map((p) => (
+                <option key={p.id} value={p.id}>{p.nom}</option>
+              ))}
+            </select>
+          </div>
+          <div className="champ">
+            <label>Je suis le relecteur</label>
+            <select value={etudiantId} onChange={(e) => setEtudiantId(e.target.value)} disabled={!promotionId}>
+              <option value="">— choisir mon nom —</option>
+              {etudiants.map((et) => (
+                <option key={et.id} value={et.id}>{et.nom}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
 
       {etudiantId && (
-        <section style={{ marginTop: 16 }}>
-          <h2>
-            Mes relectures{' '}
-            <button onClick={rafraichir} disabled={chargement}>Rafraîchir</button>
-          </h2>
-          {chargement && <p>Chargement…</p>}
-          {erreur && <p style={{ color: 'red' }}>{erreur.code} : {erreur.message}</p>}
-          {message && <p style={{ color: 'green' }}>{message}</p>}
+        <section className="carte">
+          <div className="carte__tete">
+            <h2 className="carte__titre">Mes relectures</h2>
+            <button className="bouton bouton--secondaire" onClick={rafraichir} disabled={chargement}>
+              ⟳ Rafraîchir
+            </button>
+          </div>
+          {chargement && <div className="notice notice--info">Chargement…</div>}
+          {erreur && (
+            <div className="notice notice--erreur">⚠ <code>{erreur.code}</code> — {erreur.message}</div>
+          )}
+          {message && <div className="notice notice--succes">✓ {message}</div>}
           {relectures.length === 0 && !chargement && (
-            <p>Aucune relecture assignée. Un tirage au sort vous désignera parmi les présents (RG7).</p>
+            <p className="vide">
+              Aucune relecture assignée. Un tirage au sort vous désignera parmi les présents (RG7).
+            </p>
           )}
           {relectures.map((r) => (
             <FormulaireRelecture key={r.relectureId} relecture={r} onSoumettre={soumettre} chargement={chargement} />
@@ -109,19 +123,25 @@ function FormulaireRelecture({ relecture, onSoumettre, chargement }) {
   const [commentaire, setCommentaire] = useState(relecture.commentaire || '')
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 8, marginBottom: 8 }}>
-      <div>
-        Exercice #{relecture.exerciceId} —{' '}
+    <div className="item">
+      <div className="item__tete">
+        <div className="item__titre">
+          <span className={relecture.rendue ? 'badge badge--vert' : 'badge badge--ambre'}>
+            {relecture.rendue ? 'Rendu' : 'À faire'}
+          </span>
+          <span className="badge badge--gris">Exercice #{relecture.exerciceId}</span>
+        </div>
         <a href={relecture.lien} target="_blank" rel="noreferrer">{relecture.lien}</a>
       </div>
       <form
+        className="formulaire"
         onSubmit={(e) => {
           e.preventDefault()
           onSoumettre(relecture, Number(note), commentaire)
         }}
       >
-        <label>
-          Note (entière, 0–20, RG9):{' '}
+        <div className="champ" style={{ minWidth: 150, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <label style={{ whiteSpace: 'nowrap' }}>Note (0–20, RG9)</label>
           <input
             type="number"
             min="0"
@@ -129,15 +149,16 @@ function FormulaireRelecture({ relecture, onSoumettre, chargement }) {
             step="1"
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            style={{ width: 80 }}
             required
           />
-          /20
-        </label>{' '}
-        <label>
-          Commentaire:{' '}
-          <input value={commentaire} onChange={(e) => setCommentaire(e.target.value)} size={50} required />
-        </label>{' '}
-        <button type="submit" disabled={chargement}>
+          <span className="badge badge--indigo">/ 20</span>
+        </div>
+        <div className="champ" style={{ flex: 2, minWidth: 260 }}>
+          <label>Commentaire</label>
+          <input value={commentaire} onChange={(e) => setCommentaire(e.target.value)} placeholder="Avis sur l'exercice…" required />
+        </div>
+        <button type="submit" className="bouton bouton--principal" disabled={chargement}>
           {relecture.rendue ? 'Corriger ma relecture' : 'Rendre ma relecture'}
         </button>
       </form>

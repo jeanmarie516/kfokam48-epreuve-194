@@ -83,55 +83,73 @@ export default function EcranEtudiant() {
 
   return (
     <div>
-      <label>
-        Promotion:{' '}
-        <select value={promotionId} onChange={(e) => { setPromotionId(e.target.value); setEtudiantId('') }}>
-          <option value="">— choisir —</option>
-          {promotions.map((p) => (
-            <option key={p.id} value={p.id}>{p.nom}</option>
-          ))}
-        </select>
-      </label>{' '}
-      <label>
-        Je suis :{' '}
-        <select value={etudiantId} onChange={(e) => setEtudiantId(e.target.value)} disabled={!promotionId}>
-          <option value="">— choisir mon nom —</option>
-          {etudiants.map((et) => (
-            <option key={et.id} value={et.id}>{et.nom}</option>
-          ))}
-        </select>
-      </label>
+      <div className="carte">
+        <div className="carte__tete">
+          <h2 className="carte__titre">Qui êtes-vous ?</h2>
+          <span className="badge badge--indigo">Q1 · identité déclarée</span>
+        </div>
+        <div className="champ--row">
+          <div className="champ">
+            <label>Promotion</label>
+            <select value={promotionId} onChange={(e) => { setPromotionId(e.target.value); setEtudiantId('') }}>
+              <option value="">— choisir —</option>
+              {promotions.map((p) => (
+                <option key={p.id} value={p.id}>{p.nom}</option>
+              ))}
+            </select>
+          </div>
+          <div className="champ">
+            <label>Je suis</label>
+            <select value={etudiantId} onChange={(e) => setEtudiantId(e.target.value)} disabled={!promotionId}>
+              <option value="">— choisir mon nom —</option>
+              {etudiants.map((et) => (
+                <option key={et.id} value={et.id}>{et.nom}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
 
       {etudiantId && (
         <>
-          <section style={{ marginTop: 16 }}>
-            <h2>Marquer ma présence</h2>
-            <form onSubmit={marquerPresence}>
-              <label>
-                Session:{' '}
-                <select value={sessionId} onChange={(e) => setSessionId(e.target.value)}>
-                  <option value="">— session où déposer ensuite —</option>
+          <section className="carte">
+            <h2 className="carte__titre">Marquer ma présence</h2>
+            <form className="formulaire" onSubmit={marquerPresence}>
+              <div className="champ" style={{ flex: 1, minWidth: 220 }}>
+                <label htmlFor="e-session">Session</label>
+                <select id="e-session" value={sessionId} onChange={(e) => setSessionId(e.target.value)}>
+                  <option value="">— session —</option>
                   {sessions.map((s) => (
                     <option key={s.id} value={s.id}>
                       {s.titre} {s.cloturee ? '(clôturée)' : ''}
                     </option>
                   ))}
                 </select>
-              </label>{' '}
-              <label>
-                Code reçu:{' '}
-                <input value={code} onChange={(e) => setCode(e.target.value)} maxLength={6} required />
-              </label>{' '}
-              <button type="submit" disabled={chargement}>Je suis présent</button>
+              </div>
+              <div className="champ">
+                <label htmlFor="e-code">Code reçu</label>
+                <input
+                  id="e-code"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  maxLength={6}
+                  placeholder="6 chiffres"
+                  required
+                  style={{ letterSpacing: 6, fontFamily: 'var(--mono)', fontWeight: 700 }}
+                />
+              </div>
+              <button type="submit" className="bouton bouton--principal" disabled={chargement}>
+                Je suis présent
+              </button>
             </form>
           </section>
 
-          <section style={{ marginTop: 16 }}>
-            <h2>Déposer mon exercice</h2>
-            <form onSubmit={deposer}>
-              <label>
-                Session:{' '}
-                <select value={sessionId} onChange={(e) => setSessionId(e.target.value)}>
+          <section className="carte">
+            <h2 className="carte__titre">Déposer mon exercice</h2>
+            <form className="formulaire" onSubmit={deposer}>
+              <div className="champ" style={{ flex: 1, minWidth: 220 }}>
+                <label htmlFor="e-dep-session">Session</label>
+                <select id="e-dep-session" value={sessionId} onChange={(e) => setSessionId(e.target.value)}>
                   <option value="">— choisir —</option>
                   {sessions.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -139,48 +157,60 @@ export default function EcranEtudiant() {
                     </option>
                   ))}
                 </select>
-              </label>{' '}
-              <label>
-                Lien:{' '}
+              </div>
+              <div className="champ" style={{ flex: 2, minWidth: 280 }}>
+                <label htmlFor="e-lien">Lien de l'exercice</label>
                 <input
+                  id="e-lien"
                   value={lien}
                   onChange={(e) => setLien(e.target.value)}
                   placeholder="https://github.com/moi/exo"
-                  size={40}
                   required
                 />
-              </label>{' '}
-              <button type="submit" disabled={chargement || !sessionId}>Déposer</button>
+              </div>
+              <button type="submit" className="bouton bouton--principal" disabled={chargement || !sessionId}>
+                Déposer
+              </button>
             </form>
           </section>
 
-          <section style={{ marginTop: 16 }}>
-            <h2>Mes exercices et notes reçues</h2>
-            {chargement && <p>Chargement…</p>}
-            {erreur && <p style={{ color: 'red' }}>{erreur.code} : {erreur.message}</p>}
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-            {mesExercices.length === 0 && !chargement && <p>Aucun exercice déposé.</p>}
+          <section className="carte">
+            <div className="carte__tete">
+              <h2 className="carte__titre">Mes exercices et notes reçues</h2>
+              <span className="badge badge--gris">{mesExercices.length} exercice{mesExercices.length > 1 ? 's' : ''}</span>
+            </div>
+            {chargement && <div className="notice notice--info">Chargement…</div>}
+            {erreur && (
+              <div className="notice notice--erreur">⚠ <code>{erreur.code}</code> — {erreur.message}</div>
+            )}
+            {message && <div className="notice notice--succes">✓ {message}</div>}
+
+            {mesExercices.length === 0 && !chargement && <p className="vide">Aucun exercice déposé.</p>}
+
             {mesExercices.map((ex) => (
-              <div key={ex.id} style={{ border: '1px solid #ccc', padding: 8, marginBottom: 8 }}>
-                <div>
-                  Session {ex.sessionId} — <strong>{ex.statut}</strong>{' '}
+              <div key={ex.id} className="item">
+                <div className="item__tete">
+                  <div className="item__titre">
+                    <span className="badge badge--gris">Session {ex.sessionId}</span>
+                    <span className={ex.statut === 'RELU' ? 'badge badge--vert' : 'badge badge--ambre'}>
+                      {ex.statut}
+                    </span>
+                  </div>
                   <a href={ex.lien} target="_blank" rel="noreferrer">{ex.lien}</a>
                 </div>
-                {/* S1 (enveloppe) : le remplacement du lien est sorti du périmètre maintenu —
-                    avec deux relecteurs, remplacer un lien après le premier rendu crée une incohérence. */}
                 {ex.noteRetenue ? (
-                  <div style={{ marginTop: 4 }}>
-                    Note reçue : <strong>{ex.noteRetenue.valeur}/20</strong>
+                  <div className="item__note">
+                    Note reçue : <strong>{ex.noteRetenue.valeur}/20</strong>{' '}
                     {ex.noteRetenue.provisoire && (
-                      <em> (provisoire — une seule des deux relectures rendues)</em>
+                      <span className="badge badge--ambre">provisoire · 1 relecture rendue / 2</span>
                     )}
                     {ex.noteRetenue.commentaires.map((c, i) => (
-                      <div key={i}>« {c} »</div>
+                      <p key={i} className="item__commentaire">« {c} »</p>
                     ))}
                     {/* RG14 : les noms des relecteurs ne sont jamais affichés, l'API ne les renvoie pas */}
                   </div>
                 ) : (
-                  <div style={{ marginTop: 4, color: '#666' }}>
+                  <div className="vide">
                     En attente de relecture (deux relecteurs tirés au sort parmi les présents).
                   </div>
                 )}

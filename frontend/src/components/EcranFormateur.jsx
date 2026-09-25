@@ -84,92 +84,143 @@ export default function EcranFormateur() {
 
   return (
     <div>
-      <section>
-        <h2>Ouvrir une session</h2>
-        <form onSubmit={ouvrirSession}>
-          <label>
-            Promotion:{' '}
-            <select value={promotionId} onChange={(e) => setPromotionId(e.target.value)} required>
+      <section className="carte">
+        <div className="carte__tete">
+          <h2 className="carte__titre">Ouvrir une session</h2>
+          <span className="badge badge--indigo">Code valable 15 min</span>
+        </div>
+        <form className="formulaire" onSubmit={ouvrirSession}>
+          <div className="champ">
+            <label htmlFor="f-promotion">Promotion</label>
+            <select
+              id="f-promotion"
+              value={promotionId}
+              onChange={(e) => setPromotionId(e.target.value)}
+              required
+            >
               <option value="">— choisir —</option>
               {promotions.map((p) => (
                 <option key={p.id} value={p.id}>{p.nom}</option>
               ))}
             </select>
-          </label>{' '}
-          <label>
-            Titre:{' '}
-            <input value={titre} onChange={(e) => setTitre(e.target.value)} placeholder="Java 101" required />
-          </label>{' '}
-          <button type="submit" disabled={chargement || !promotionId}>Ouvrir</button>
+          </div>
+          <div className="champ">
+            <label htmlFor="f-titre">Titre</label>
+            <input
+              id="f-titre"
+              value={titre}
+              onChange={(e) => setTitre(e.target.value)}
+              placeholder="Java 101"
+              required
+            />
+          </div>
+          <button type="submit" className="bouton bouton--principal" disabled={chargement || !promotionId}>
+            Ouvrir la session
+          </button>
         </form>
+
         {sessionOuverte && (
-          <div style={{ marginTop: 8, padding: 8, border: '1px solid #888' }}>
-            <strong>Code de présence : {sessionOuverte.code}</strong>
-            <div>
-              Expire à {new Date(sessionOuverte.expirationAt).toLocaleTimeString()} (RG1 : +15 min)
-              {sessionOuverte.cloturee ? ' · CLÔTURÉE' : ''}
+          <div style={{ marginTop: 18 }}>
+            <div className="code-box">
+              <div>
+                <div className="code-box__label">CODE DE PRÉSENCE</div>
+                <div className="code-box__valeur">{sessionOuverte.code}</div>
+              </div>
+              <div className="code-box__expire">
+                Expire à {new Date(sessionOuverte.expirationAt).toLocaleTimeString()} (RG1 : +15 min)
+                <br />
+                {sessionOuverte.cloturee ? <strong>Session clôturée</strong> : 'À communiquer aux étudiants'}
+              </div>
             </div>
+
             {!sessionOuverte.cloturee && (
               <>
-                <form onSubmit={ajouterPresence} style={{ marginTop: 8 }}>
-                  <label>
-                    Ajouter une présence à la main (Q14):{' '}
-                    <select value={etudiantPresence} onChange={(e) => setEtudiantPresence(e.target.value)} required>
+                <form className="formulaire" onSubmit={ajouterPresence}>
+                  <div className="champ">
+                    <label htmlFor="f-presence">Ajouter une présence à la main (Q14)</label>
+                    <select
+                      id="f-presence"
+                      value={etudiantPresence}
+                      onChange={(e) => setEtudiantPresence(e.target.value)}
+                      required
+                    >
                       <option value="">— étudiant —</option>
                       {etudiants.map((et) => (
                         <option key={et.id} value={et.id}>{et.nom}</option>
                       ))}
                     </select>
-                  </label>{' '}
-                  <button type="submit">Ajouter</button>
+                  </div>
+                  <button type="submit" className="bouton bouton--secondaire">Ajouter</button>
+                  <button type="button" className="bouton bouton--danger" onClick={cloturer}>
+                    Clôturer la session
+                  </button>
                 </form>
-                <button onClick={cloturer} style={{ marginTop: 8 }}>Clôturer la session</button>
               </>
             )}
           </div>
         )}
-        {message && <p style={{ color: 'green' }}>{message}</p>}
+        {message && <div className="notice notice--succes">✓ {message}</div>}
       </section>
 
-      <section style={{ marginTop: 24 }}>
-        <h2>
-          Tableau{' '}
-          <button onClick={() => rafraichirTableau()} disabled={chargement}>Rafraîchir</button>
-        </h2>
-        {chargement && <p>Chargement…</p>}
-        {erreur && <p style={{ color: 'red' }}>{erreur.code} : {erreur.message}</p>}
+      <section className="carte">
+        <div className="carte__tete">
+          <h2 className="carte__titre">Tableau de suivi</h2>
+          <button className="bouton bouton--secondaire" onClick={() => rafraichirTableau()} disabled={chargement}>
+            ⟳ Rafraîchir
+          </button>
+        </div>
+        {chargement && <div className="notice notice--info">Chargement…</div>}
+        {erreur && (
+          <div className="notice notice--erreur">
+            ⚠ <code>{erreur.code}</code> — {erreur.message}
+          </div>
+        )}
         {tableau.length > 0 && (
-          <table border="1" cellPadding="6">
-            <thead>
-              <tr>
-                <th>Étudiant</th>
-                <th>Sessions / présence</th>
-                <th>Exercices déposés</th>
-                <th>Moyenne reçue</th>
-                <th>Relectures en attente</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tableau.map((ligne) => (
-                <tr key={ligne.etudiantId}>
-                  <td>{ligne.nom}</td>
-                  <td>
-                    {ligne.presences.filter(Boolean).length === 0
-                      ? '—'
-                      : ligne.presences.map((p, i) =>
-                          p ? (
-                            <span key={i}> · S{p.sessionId} ({p.source}) </span>
-                          ) : null,
-                        )}
-                  </td>
-                  <td>{ligne.exercicesDeposes}</td>
-                  {/* F3 : la moyenne vient de l'API, jamais recalculée ici */}
-                  <td>{ligne.moyenne == null ? '—' : `${ligne.moyenne}/20`}</td>
-                  <td>{ligne.relecturesEnAttente > 0 ? ligne.relecturesEnAttente : '—'}</td>
+          <div className="tableau-enveloppe">
+            <table className="tableau">
+              <thead>
+                <tr>
+                  <th>Étudiant</th>
+                  <th>Présence par session</th>
+                  <th>Exercices</th>
+                  <th>Moyenne reçue</th>
+                  <th>Relectures en attente</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tableau.map((ligne) => {
+                  const presences = ligne.presences.filter(Boolean)
+                  return (
+                    <tr key={ligne.etudiantId}>
+                      <td><strong>{ligne.nom}</strong></td>
+                      <td>
+                        {presences.length === 0 ? (
+                          <span className="badge badge--gris">—</span>
+                        ) : (
+                          presences.map((p, i) => (
+                            <span
+                              key={i}
+                              className={p.source === 'FORMATEUR' ? 'badge badge--violet' : 'badge badge--indigo'}
+                            >
+                              S{p.sessionId} · {p.source === 'FORMATEUR' ? 'manuel' : 'code'}
+                            </span>
+                          ))
+                        )}
+                      </td>
+                      <td>{ligne.exercicesDeposes > 0
+                        ? <span className="badge badge--vert">{ligne.exercicesDeposes} déposé{ligne.exercicesDeposes > 1 ? 's' : ''}</span>
+                        : '—'}</td>
+                      {/* F3 : la moyenne vient de l'API, jamais recalculée ici */}
+                      <td>{ligne.moyenne == null ? '—' : <strong>{ligne.moyenne}/20</strong>}</td>
+                      <td>{ligne.relecturesEnAttente > 0
+                        ? <span className="badge badge--ambre">{ligne.relecturesEnAttente}</span>
+                        : '—'}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         )}
       </section>
     </div>
