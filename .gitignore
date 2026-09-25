@@ -1,0 +1,46 @@
+# ===== Java / Maven =====
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+replay_pid*
+
+# IDE Java
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# ===== Node / JavaScript =====
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Frontend (Vite)
+frontend/vite.config.ts.timestamp-*
+
+# ===== Environnement / secrets =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
