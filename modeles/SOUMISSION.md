@@ -11,9 +11,9 @@ Centre : **Yaoundé**
 
 Dépôt GitHub (public) : https://github.com/jeanmarie516/kfokam48-epreuve-194
 
-Commit final (hash complet sur 40 caractères) : **2f32b6afadb82eebc7de3dc773a3c13d74450180**
+Commit final (hash complet sur 40 caractères) : **86ca7a0a3d42fa1ec9f57de9457364e20768fe87**
 
-> ⚠️ À vérifier au moment du téléversement : ce champ est le hash du **dernier commit poussé de `main`**. Il correspond au commit `2f32b6a` (fixs ports 5173/8080 et DNS docker-compose). Relevez-le depuis l'onglet « Commits » de GitHub (bouton de copie) juste **avant** le téléversement, et remplacez-le ici si besoin. Tout ce qui est poussé après le hash déclaré est ignoré par le correcteur.
+> ⚠️ À vérifier au moment du téléversement : ce champ est le hash du **dernier commit poussé de `main`**. Il correspond au commit `86ca7a0` (refonte visuelle du frontend). Relevez-le depuis l'onglet « Commits » de GitHub (bouton de copie) juste **avant** le téléversement, et remplacez-le ici si besoin. Tout ce qui est poussé après le hash déclaré est ignoré par le correcteur.
 
 ## Divers
 
