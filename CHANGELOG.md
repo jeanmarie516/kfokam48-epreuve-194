@@ -54,9 +54,35 @@ Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) 
   et le frontend ; données de démonstration incluses.
 - **README d'installation** testé depuis un clone vierge.
 
-### Repriorisation écrite (en attente de l'enveloppe)
+### Repriorisation écrite
 
-- L'enveloppe de l'étape 3 (bug signalé + changement de besoin) n'était pas encore
-  remise au moment de la livraison v1.0. Elle sera traitée dès réception : issue
-  ouverte avant de coder, bug reproduit, migration versionnée, contrat mis à jour,
-  correctif et évolution séparés, cahier des charges et diagrammes mis à jour.
+- L'enveloppe de l'étape 3 n'était pas encore remise à la livraison v1.0 ; traitée
+  ensuite en v1.1.0 (voir ci-dessous), le jalon final étant reposé après.
+
+## [1.1.0] — Enveloppe étape 3 : bug + changement de besoin
+
+### Corrigé (bug #24)
+
+- **Course sur les présences** — deux soumissions quasi simultanées du même étudiant :
+  la perdante recevait 409 CONFLIT générique au lieu du 409 DEJA_PRESENT du contrat.
+  Preuve dans l'historique : test d'intégration concurrent committé rouge, correctif,
+  même test vert. [PR fix/course-presences]
+
+### Ajouté (changement de besoin — issues #25, #26, #27)
+
+- **Deux relecteurs distincts par exercice** (RG6 v2 remplace Q6) : tirage jusqu'à
+  2 relecteurs parmi les présents, complété à chaque nouvelle présence (D2/H2).
+- **Note retenue** : moyenne des deux relectures rendues, au dixième près sans arrondi
+  (RG16, décision D3) ; provisoire si une seule rendue (RG17) ; en attente si aucune (RG18).
+- **Migration V3** ajoutée (V1/V2 jamais modifiées) : unicité (exercice, relecteur) —
+  les données déjà en base survivent. [PR feature/deux-relecteurs]
+- **Contrat v1.1.0** : NoteRetenue { valeur, provisoire, commentaires } ; moyenne du
+  tableau portant sur les notes retenues.
+- **Analyse mise à jour** (cahier des charges v2, D2/D4 corrigés) dans un commit dédié
+  qui le dit.
+
+### Retiré (sacrifice assumé S1)
+
+- **EF10/RG8 (remplacement du lien)** sort du périmètre maintenu : avec deux relecteurs,
+  remplacer un lien après le premier rendu crée une incohérence entre relectures.
+  L'endpoint reste conforme au contrat ; le formulaire disparaît de l'écran étudiant.
