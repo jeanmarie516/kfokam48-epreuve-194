@@ -61,11 +61,13 @@ public class RelectureService {
         }
         Relecture r = relectures.findById(relectureId)
                 .orElseThrow(ApiException::relectureInconnue);
-        if (!r.getRelecteur().getId().equals(relecteurId)) {
-            throw ApiException.relectureInconnue(); // on ne révèle pas les relectures d'autrui
-        }
+        // RG5 d'abord : le déposant doit toujours recevoir 403, même s'il n'est pas
+        // le relecteur assigné — c'est le code que le contrat attend de lui.
         if (r.getExercice().getDepositaire().getId().equals(relecteurId)) {
             throw ApiException.autoRelectureInterdite(); // RG5 → 403
+        }
+        if (!r.getRelecteur().getId().equals(relecteurId)) {
+            throw ApiException.relectureInconnue(); // on ne révèle pas les relectures d'autrui
         }
         return r;
     }
