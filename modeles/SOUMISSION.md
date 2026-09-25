@@ -3,17 +3,17 @@
 > ⚠️ Ce fichier est téléversé sur la plateforme **avant 18h00**. C'est l'étape 5 qui valide l'examen.
 > ⚠️ Il ne reste **qu'un seul dépôt** (le sujet corrigé supprime l'épreuve Git sur bundle).
 
-Nom et prénom(s) : **<À COMPLÉTER — nom et prénom du candidat>**
-Matricule : **KF48-<...>-<...>** (dépôt : `kfokam48-epreuve-194`)
-Centre : **<À COMPLÉTER : Yaoundé | Douala | Bafoussam>**
+Nom et prénom(s) : **Jean-Marie KAREMAMANA**
+Matricule : **194** (dépôt : `kfokam48-epreuve-194`)
+Centre : **Yaoundé**
 
 ## Projet
 
 Dépôt GitHub (public) : https://github.com/jeanmarie516/kfokam48-epreuve-194
 
-Commit final (hash complet sur 40 caractères) : **436a075eb92720d31c083cd0968fdcf79a8c9c9a**
+Commit final (hash complet sur 40 caractères) : **2f32b6afadb82eebc7de3dc773a3c13d74450180**
 
-> ⚠️ À COMPLÉTER au moment de la soumission : ce champ doit contenir le hash du **dernier commit poussé de `main`**. La valeur ci-dessus correspond au dernier commit au moment de la rédaction. Relevez-la depuis l'onglet « Commits » de GitHub (bouton de copie) **après le tout dernier `git push`**, et remplacez-la ici dans la copie que vous téléversez. Tout ce qui est poussé après le hash déclaré est ignoré par le correcteur.
+> ⚠️ À vérifier au moment du téléversement : ce champ est le hash du **dernier commit poussé de `main`**. Il correspond au commit `2f32b6a` (fixs ports 5173/8080 et DNS docker-compose). Relevez-le depuis l'onglet « Commits » de GitHub (bouton de copie) juste **avant** le téléversement, et remplacez-le ici si besoin. Tout ce qui est poussé après le hash déclaré est ignoré par le correcteur.
 
 ## Divers
 
