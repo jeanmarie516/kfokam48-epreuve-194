@@ -11,9 +11,9 @@ Centre : **<À COMPLÉTER : Yaoundé | Douala | Bafoussam>**
 
 Dépôt GitHub (public) : https://github.com/jeanmarie516/kfokam48-epreuve-194
 
-Commit final (hash complet sur 40 caractères) : **<À RELEVER — hash du DERNIER commit de `main` tel que sur GitHub, après le tout dernier push>**
+Commit final (hash complet sur 40 caractères) : **436a075eb92720d31c083cd0968fdcf79a8c9c9a**
 
-> Le correcteur évalue exactement le commit déclaré ici. Relevez-le depuis l'onglet « Commits » de GitHub (bouton de copie), après avoir poussé TOUT votre travail, et collez-le tel quel. Tout ce qui est poussé après ce hash est ignoré.
+> ⚠️ À COMPLÉTER au moment de la soumission : ce champ doit contenir le hash du **dernier commit poussé de `main`**. La valeur ci-dessus correspond au dernier commit au moment de la rédaction. Relevez-la depuis l'onglet « Commits » de GitHub (bouton de copie) **après le tout dernier `git push`**, et remplacez-la ici dans la copie que vous téléversez. Tout ce qui est poussé après le hash déclaré est ignoré par le correcteur.
 
 ## Divers
 

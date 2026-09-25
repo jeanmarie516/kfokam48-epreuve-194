@@ -78,3 +78,4 @@ cd backend && ./mvnw test
 - [Contrat d'API](api/contrat.yaml) — OpenAPI 3.0
 - [Journal de bord](docs/JOURNAL.md) — une entrée par étape
 - [CHANGELOG](CHANGELOG.md)
+- [Soumission (étape 5)](modeles/SOUMISSION.md) — fichier à téléverser sur la plateforme (dépôt unique, hash final)
