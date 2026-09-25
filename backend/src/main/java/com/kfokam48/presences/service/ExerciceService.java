@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * RG12 : le dépôt reste possible après expiration du code, jusqu'à la clôture (Q12).
  * RG15 : une session clôturée refuse tout dépôt.
- * D2 : au dépôt, un relecteur est tiré au dépôt parmi les présents (H2 sinon).
+ * D2 : au dépôt, jusqu'à deux relecteurs sont tirés parmi les présents (RG6 v2 ; H2 sinon).
  */
 @Service
 public class ExerciceService {

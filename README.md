@@ -47,7 +47,7 @@ docker compose up --build
 1. **Le formateur ouvre une session** et obtient un code de présence (expire après 15 min).
 2. **L'étudiant saisit ce code** pour marquer sa présence (une seule fois, 5 erreurs de code = blocage 2 min).
 3. **L'étudiant dépose le lien** de son exercice pour la session (possible jusqu'à la clôture).
-4. **Un relecteur est tiré au sort** parmi les présents : il rend une note entière sur 20 et un commentaire, corrigeables jusqu'à la clôture.
+4. **Deux relecteurs sont tirés au sort** parmi les présents (règle v2 de l'enveloppe) : ils rendent chacun une note entière sur 20 et un commentaire, corrigeables jusqu'à la clôture ; la note retenue est la moyenne des deux, provisoire si une seule relecture est rendue.
 5. **Le formateur voit le tableau** : présence par session, exercices déposés, moyenne des notes reçues, relectures en attente.
 
 ## Architecture
